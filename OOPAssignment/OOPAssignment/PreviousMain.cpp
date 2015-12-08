@@ -10,7 +10,7 @@
 #include "Matrix.h"
 #include "BinaryImage.h"
 
-int main(int argc, const char * argv[])
+int previousMain(int argc, const char * argv[])
 {
     double A[35];
    // int inputM, inputN, contentVal;
