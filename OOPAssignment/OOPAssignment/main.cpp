@@ -3,6 +3,10 @@
 #include <fstream> // ifstream
 #include <istream>
 
+
+#include "BinaryImage.h"
+#include "Matrix.h"
+
 using namespace std;
 
 // Input data are provided in .txt format and can be converted to .pgm files for visualization
@@ -19,6 +23,8 @@ double* readTXT(char *fileName, int sizeR, int sizeC);
 // Use Q = 255 for greyscale images and Q=1 for binary images.
 void WritePGM(char *filename, double *data, int sizeR, int sizeC, int Q);
 
+double sumSquaredDiffs(Matrix unshuffled, Matrix shuffled);
+
 
 int main()
 {
@@ -33,6 +39,7 @@ int main()
 	// inside readTXT. readTXT will read an image (in .pgm format) of size MxN and will  store the result in input_data.
 	// once you're done with data DO NOT forget to delete the memory as in the end of this main() function
 	double* input_data = 0;
+	double* noisy_image = 0;
 	
 	cout << endl;
 	cout << "Data from text file -------------------------------------------" << endl;
@@ -40,20 +47,26 @@ int main()
 	// .pgm image is stored in inputFileName, change the path in your program appropriately
 	char* inputFileName = "shuffled_logo.txt"; 
 	input_data = readTXT(inputFileName, M, N);
+	noisy_image = readTXT("unshuffled_logo_noisy.txt", M, N);
 
-	/*
+	//BinaryImage shuffledImage(M, N, input_data, 128);
+	//BinaryImage noisyImage(M, N, noisy_image, 128);
 
-	CODE TO PROCESS input_data SHOULD BE WRITTEN HERE!! (after removing the comments:)
+	double B[] = { 12, 11, 14, 13, 17, 10 };
+	double C[] = { 1, 2, 3, 4, 5, 6 };
 
-	*/
+	Matrix matrixA(3, 2, B);
+	Matrix matrixB(3, 2, C);
 
+	std::cout << sumSquaredDiffs(matrixA, matrixB, 3, 2) << std::endl;
 	// writes data back to .pgm file stored in outputFileName
 	char* outputFileName = "logo_restored.pgm";
 	// Use Q = 255 for greyscale images and 1 for binary images.
 	int Q = 255; 
 	WritePGM(outputFileName, input_data, M, N, Q); 
 
-	delete [] input_data;
+	delete[] input_data;
+	delete[] noisy_image;
 
 	return 0;
 }
@@ -83,6 +96,55 @@ double* readTXT(char *fileName, int sizeR, int sizeC)
 
   return data;
 }
+
+void NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
+{
+	int M = 512;
+	int N = 512;
+	int startIndex = 0;
+	int endIndex = 31;
+	int currentBestBlock[] = { startIndex, endIndex };
+
+	Matrix currentUnshuffled = unshuffled_image.getBlock(startIndex, endIndex, startIndex, endIndex);
+
+	for (int i = 0; i < 16; i++)
+	{
+		unshuffled_image.getBlock(startIndex, endIndex, startIndex, endIndex);
+
+		for (int j = 0; j < 16; j++)
+		{
+			shuffled_image.getBlock(startIndex, endIndex, startIndex, endIndex);
+			//SSD goes here
+			sumSquaredDiffs(unshuffled_image.getBlock(startIndex, endIndex, startIndex, endIndex), shuffled_image.getBlock(startIndex, endIndex, startIndex, endIndex));
+		}
+		startIndex = endIndex + 1;
+		endIndex += 32;
+	}
+
+	// foreach block in shuffled: //
+	//		get block 1 from unshuffled // 
+	//			foreach block in shuffled:
+	//				compare block 1 to all blocks from unshuffled
+	//		put block 1 in place 1 of new image
+	// return new image
+}
+
+double sumSquaredDiffs(Matrix unshuffled, Matrix shuffled, int M, int N)
+{
+	double SSD = 0;
+	Matrix temp;
+
+	temp = unshuffled - shuffled;
+	double* tempArray = temp.getData();
+	for (int i = 0; i < M * N; i++)
+	{
+		int temp = (tempArray[i] * tempArray[i]);
+		SSD += temp;
+	}
+
+	return SSD;
+}
+
 
 // convert data from double to .pgm stored in filename
 void WritePGM(char *filename, double *data, int sizeR, int sizeC, int Q)

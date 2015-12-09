@@ -52,7 +52,6 @@ BinaryImage BinaryImage::operator+(const BinaryImage& other)
         }
     }
     return temp;
-    
 }
 
 BinaryImage BinaryImage::operator-(const BinaryImage& other)

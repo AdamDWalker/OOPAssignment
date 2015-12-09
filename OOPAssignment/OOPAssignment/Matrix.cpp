@@ -28,7 +28,7 @@ Matrix::Matrix(int sizeR, int sizeC, double* input_data)
 
 Matrix::Matrix(const Matrix& objectName)
 {
-    std::cout << "Matrix::Matrix(const Matrix&) is invoked" << std::endl;
+   // std::cout << "Matrix::Matrix(const Matrix&) is invoked" << std::endl;
     _M = objectName._M;
     _N = objectName._N;
     
@@ -170,6 +170,11 @@ double Matrix::get(int i, int j)
     k = i * _N + j;
     
     return _data[k];
+}
+
+double* Matrix::getData()
+{
+	return _data;
 }
 
 void Matrix::set(int i, int j, double val)

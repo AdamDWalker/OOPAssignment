@@ -21,7 +21,8 @@ public:
     double operator()(int i, int j);
     
     double get(int i, int j); // This is now replaced by the overloaded () operator, but I'll keep it here for a while anyway. Why not? It's my code not yours.
-    void set(int i, int j, double val);
+	double* getData();
+	void set(int i, int j, double val);
     Matrix getBlock(int start_column, int end_column, int start_row, int end_row);
     void printmatrix();
 
