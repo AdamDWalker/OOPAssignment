@@ -6,6 +6,7 @@ class BinaryImage : public Matrix
 {
 public:
     BinaryImage();
+	BinaryImage(int M, int N);
     BinaryImage( int M, int N, double* input_data, double threshold);
     ~BinaryImage();
     

@@ -6,6 +6,11 @@ BinaryImage::BinaryImage() : Matrix()
  
 }
 
+BinaryImage::BinaryImage(int M, int N) : Matrix(M, N)
+{
+
+}
+
 BinaryImage::BinaryImage( int M, int N, double* input_data, double threshold ) : Matrix( M, N, input_data )
 {
     

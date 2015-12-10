@@ -6,6 +6,7 @@ class Matrix
 {
 public:
     Matrix();
+	Matrix(int M, int N);
     Matrix(int sizeR, int sizeC, double* input_data);
     Matrix(const Matrix& objectName);
     ~Matrix();
@@ -16,7 +17,6 @@ public:
     Matrix operator-(const Matrix& other);
     Matrix operator*(const Matrix& other);
     Matrix operator/(const Matrix& other);
-    Matrix operator++();
     Matrix operator++(int dummyInt);
     double operator()(int i, int j);
     
@@ -24,6 +24,7 @@ public:
 	double* getData();
 	void set(int i, int j, double val);
     Matrix getBlock(int start_column, int end_column, int start_row, int end_row);
+	void placeBlock(Matrix block, int startCol, int startRow);
     void printmatrix();
 
 protected:

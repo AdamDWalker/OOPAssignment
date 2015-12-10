@@ -14,6 +14,19 @@ Matrix::Matrix()
     }
 }
 
+Matrix::Matrix(int M, int N)
+{
+	_M = M;
+	_N = N;
+
+	_data = new double[_M*_N];
+
+	for (int x = 0; x < _M*_N; x++)
+	{
+		_data[x] = 0;
+	}
+}
+
 Matrix::Matrix(int sizeR, int sizeC, double* input_data)
 {
     //std::cout << "Matrix::Matrix(int sizeR, int sizeC, double val[]) is invoked" << std::endl;
@@ -210,6 +223,26 @@ Matrix Matrix::getBlock(int start_column, int end_column, int start_row, int end
     
     Matrix returnMatrix(rows, columns, tempData);
     return returnMatrix;
+}
+
+void Matrix::placeBlock(Matrix block, int startCol, int startRow)
+{
+	int i = startRow;
+	int j = startCol;
+	int k;
+	int N = 512;
+
+	int count = 0;
+	for (int i = startRow; i < startRow + 32; i++)
+	{
+		for (int j = startCol; j < startCol + 32; j++)
+		{
+			//std::cout << i << " " << j << std::endl;
+			k = i * N + j;
+			this->_data[k] = block._data[k];
+			//std::cout << "Outer: " << count2 << std::endl;
+		}
+	}
 }
 
 void Matrix::printmatrix()
