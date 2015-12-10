@@ -212,7 +212,7 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 				bestBlock.printmatrix();
 				std::cout << "\n\n\n" << bestSSD;
 			}
-			returnImage.placeBlock(bestBlock, colPos, rowPos);
+			returnImage.placeBlock(bestBlock, startCol1, startRow1);
 
 		}
 		else
