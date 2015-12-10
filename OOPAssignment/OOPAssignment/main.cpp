@@ -181,15 +181,17 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 					*/
 					currentBlock = shuffled_image.getBlock(startCol2, startCol2 + 31, startRow2, startRow2 + 31);
 					SSD = sumSquaredDiffs(unshuffled_image.getBlock(startCol1, startCol1 + 31, startRow1, startRow1 + 31), currentBlock, 32, 32);
+					std::cout << " " << SSD;
 					
-					if (count2 == 1)
+					if (count2 == 0)
 					{
 						bestSSD = SSD;
 						bestBlock = currentBlock;
 						colPos = startCol2;
 						rowPos = startRow2;
 					}
-					else if (SSD < bestSSD)
+
+					if (SSD < bestSSD)
 					{
 						bestSSD = SSD;
 						bestBlock = currentBlock;
