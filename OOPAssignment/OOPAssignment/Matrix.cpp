@@ -209,10 +209,10 @@ Matrix Matrix::getBlock(int start_column, int end_column, int start_row, int end
     double* tempData = new double[rows * columns];
 	int count = 0;
 
-    for(int i = start_row; i < end_row; i++)
+    for(int i = start_row; i <= end_row; i++)
     {
         
-		for (int j = start_column; j < end_column; j++)
+		for (int j = start_column; j <= end_column; j++)
         {
             //int k = i * N + j;
             k = (i * _N) + j;
