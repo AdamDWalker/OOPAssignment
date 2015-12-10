@@ -218,6 +218,7 @@ Matrix Matrix::getBlock(int start_column, int end_column, int start_row, int end
             //std::cout << i << " " << j << " " << _N << " " << _data[k] << std::endl;
             tempData[j] = _data[k];
             //std::cout << localArray[j];
+			//
         }
     }
     
