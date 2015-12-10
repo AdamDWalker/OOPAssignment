@@ -71,10 +71,9 @@ int main()
 	}*/
 
 
-
-	double* output_data = NNS(noisyImage, shuffledImage).getData();
-
-
+	BinaryImage tempImage(512, 512);
+	tempImage = NNS(noisyImage, shuffledImage);
+	double* output_data = tempImage.getData();
 
 	//double B[] = { 12, 11, 14, 13, 17, 10 };
 	//double C[] = { 1, 2, 3, 4, 5, 6 };
@@ -91,8 +90,10 @@ int main()
 	// writes data back to .pgm file stored in outputFileName
 	char* outputFileName = "logo_restored.pgm";
 	// Use Q = 255 for greyscale images and 1 for binary images.
-	int Q = 255; 
-	WritePGM(outputFileName, output_data, M, N, Q); 
+	int Q = 1; 
+	//WritePGM(outputFileName, output_data, M, N, Q);
+	WritePGM("Test1.pgm", shuffledImage.getData() , M, N, Q);
+	WritePGM("Test2.pgm", noisyImage.getData(), M, N, Q);
 
 	delete[] input_data;
 	delete[] noisy_image;
@@ -155,7 +156,7 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 
 	for (int i = 0; i < 256; i++)
 	{
-		std::cout << "Unshuffled block: " << count1 << " Loop: " << i << std::endl;
+		//std::cout << "Unshuffled block: " << count1 << " Loop: " << i << std::endl;
 
 		// PutBlock goes here
 
@@ -167,11 +168,6 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 		startCol2 = 0;
 		startRow2 = 0;
 
-		for (int i = 0; i < 768; i++)
-		{
-			NNSResults[i] = 0;
-		} 
-
 		if (count1 < 16)
 		{
 			for (int j = 0; j < 256; j++)
@@ -179,7 +175,7 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 				if (count2 < 16)
 				{
 					if (count2 == 1)
-						std::cout << "First loop for count: " << count1 << std::endl;
+						//std::cout << "First loop for count: " << count1 << std::endl;
 					//unshuffled_image.getBlock(startCol1, startCol1 + 31, startRow1, startRow1 + 31);
 					//shuffled_image.getBlock(startCol2, startCol2 + 31, startRow2, startRow2 + 31);
 					NNSResults[startColIndex] = startCol2;
@@ -219,13 +215,11 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 					blockStartRow = NNSResults[i - 1];
 				}
 			}
-			returnImage.placeBlock(shuffled_image.getBlock(blockStartCol, blockStartCol + 31, blockStartRow, blockStartRow + 31), blockStartCol, blockStartRow);
-
-			// Clear the results array
 			for (int i = 0; i < 768; i++)
 			{
-				NNSResults[i] = 0;
+				std::cout << " " << NNSResults[i];
 			}
+			//returnImage.placeBlock(shuffled_image.getBlock(blockStartCol, blockStartCol + 31, blockStartRow, blockStartRow + 31), blockStartCol, blockStartRow);
 
 		}
 		else

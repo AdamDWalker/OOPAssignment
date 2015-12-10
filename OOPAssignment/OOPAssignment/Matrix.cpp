@@ -10,7 +10,7 @@ Matrix::Matrix()
     
     for (int x = 0; x < _M*_N; x++)
     {
-        _data[x] = 0;
+        _data[x] = 255;
     }
 }
 
@@ -21,7 +21,7 @@ Matrix::Matrix(int M, int N)
 
 	_data = new double[_M*_N];
 
-	for (int x = 0; x < _M*_N; x++)
+	for (int x = 0; x < _M *_N; x++)
 	{
 		_data[x] = 0;
 	}
