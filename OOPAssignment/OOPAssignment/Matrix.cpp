@@ -203,20 +203,22 @@ Matrix Matrix::getBlock(int start_column, int end_column, int start_row, int end
 {
     int k;
     
-    int rows = (end_row - start_row);
-    int columns = (end_column - start_column);
+    int rows = (end_row - start_row) + 1;
+    int columns = (end_column - start_column) + 1;
     
     double* tempData = new double[rows * columns];
-    
-    for(int i = start_row; i <= end_row; i++)
+	int count = 0;
+
+    for(int i = start_row; i < end_row; i++)
     {
         
-		for (int j = start_column; j <= end_column; j++)
+		for (int j = start_column; j < end_column; j++)
         {
             //int k = i * N + j;
             k = (i * _N) + j;
             //std::cout << i << " " << j << " " << _N << " " << _data[k] << std::endl;
-            tempData[j] = _data[k];
+            tempData[count] = _data[k];
+			count++;
             //std::cout << localArray[j];
         }
     }
