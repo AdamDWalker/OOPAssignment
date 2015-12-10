@@ -218,7 +218,6 @@ Matrix Matrix::getBlock(int start_column, int end_column, int start_row, int end
             //std::cout << i << " " << j << " " << _N << " " << _data[k] << std::endl;
             tempData[j] = _data[k];
             //std::cout << localArray[j];
-			//
         }
     }
     
@@ -231,17 +230,17 @@ void Matrix::placeBlock(Matrix block, int startCol, int startRow)
 	int i = startRow;
 	int j = startCol;
 	int k;
-	int N = 4;
+	int N = 512;
 
 	int count = 0;
-	for (int i = startRow; i < startRow + 3; i++)
+	for (int i = startRow; i < startRow + 32; i++)
 	{
-		for (int j = startCol; j < startCol + 2; j++)
+		for (int j = startCol; j < startCol + 32; j++)
 		{
 			//std::cout << i << " " << j << std::endl;
 			k = i * N + j;
-			//this->_data[k] = block._data[k];
-			std::cout << "This: " << this->_data[k] << " Block: " << block._data[count] << std::endl;
+			this->_data[k] = block._data[count];
+			//std::cout << "This: " << this->_data[k] << " Block: " << block._data[count] << std::endl;
 			count++;
 		}
 	}

@@ -24,7 +24,7 @@ void WritePGM(char *filename, double *data, int sizeR, int sizeC, int Q);
 
 double sumSquaredDiffs(Matrix unshuffled, Matrix shuffled, int M, int N);
 
-void NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image);
+BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image);
 
 int main()
 {
@@ -72,24 +72,27 @@ int main()
 
 
 
-	//NNS(noisyImage, shuffledImage);
+	double* output_data = NNS(noisyImage, shuffledImage).getData();
 
-	double B[] = { 12, 11, 14, 13, 17, 10 };
-	double C[] = { 1, 2, 3, 4, 5, 6 };
 
-	Matrix matrixA(3, 2, B);
+
+	//double B[] = { 12, 11, 14, 13, 17, 10 };
+	//double C[] = { 1, 2, 3, 4, 5, 6 };
+
+	//Matrix matrixA(3, 2, B);
 	//Matrix matrixB(3, 2, C);
 
-	BinaryImage newImage(6, 4);
-	newImage.printmatrix();
-	newImage.placeBlock(matrixA, 1, 2);
+	//BinaryImage newImage(6, 4);
+	//newImage.printmatrix();
+	//newImage.placeBlock(matrixA, 1, 2);
 	//newImage.printmatrix();
 	//std::cout << sumSquaredDiffs(matrixA, matrixB, 3, 2) << std::endl;
+
 	// writes data back to .pgm file stored in outputFileName
 	char* outputFileName = "logo_restored.pgm";
 	// Use Q = 255 for greyscale images and 1 for binary images.
 	int Q = 255; 
-	WritePGM(outputFileName, input_data, M, N, Q); 
+	WritePGM(outputFileName, output_data, M, N, Q); 
 
 	delete[] input_data;
 	delete[] noisy_image;
@@ -123,8 +126,11 @@ double* readTXT(char *fileName, int sizeR, int sizeC)
   return data;
 }
 
-void NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
+BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 {
+	// Giant fuckoff empty image to overwrite and return
+	BinaryImage returnImage(512, 512);
+
 	int M = 512;
 	int N = 512;
 
@@ -164,7 +170,7 @@ void NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 		for (int i = 0; i < 768; i++)
 		{
 			NNSResults[i] = 0;
-		}
+		} 
 
 		if (count1 < 16)
 		{
@@ -213,8 +219,13 @@ void NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 					blockStartRow = NNSResults[i - 1];
 				}
 			}
+			returnImage.placeBlock(shuffled_image.getBlock(blockStartCol, blockStartCol + 31, blockStartRow, blockStartRow + 31), blockStartCol, blockStartRow);
 
-
+			// Clear the results array
+			for (int i = 0; i < 768; i++)
+			{
+				NNSResults[i] = 0;
+			}
 
 		}
 		else
@@ -226,20 +237,10 @@ void NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 		}
 			count1++;
 			startCol1 += 32;
-
-		// best of first run through
-		// clear results array
-		// Reset secondStart and secondEnd values 
-		// reset array index values
-		// Go again
 	}
 
-	// foreach block in shuffled: //
-	//		get block 1 from unshuffled // 
-	//			foreach block in shuffled:
-	//				compare block 1 to all blocks from unshuffled
-	//		put block 1 in place 1 of new image
-	// return new image
+	return returnImage;
+
 }
 
 double sumSquaredDiffs(Matrix unshuffled, Matrix shuffled, int M, int N)
