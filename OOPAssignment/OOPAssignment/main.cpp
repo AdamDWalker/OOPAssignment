@@ -82,7 +82,7 @@ int main()
 
 	BinaryImage newImage(6, 4);
 	newImage.printmatrix();
-	newImage.placeBlock(matrixA, 3, 2);
+	newImage.placeBlock(matrixA, 1, 2);
 	//newImage.printmatrix();
 	//std::cout << sumSquaredDiffs(matrixA, matrixB, 3, 2) << std::endl;
 	// writes data back to .pgm file stored in outputFileName

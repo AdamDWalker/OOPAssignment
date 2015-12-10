@@ -230,17 +230,18 @@ void Matrix::placeBlock(Matrix block, int startCol, int startRow)
 	int i = startRow;
 	int j = startCol;
 	int k;
-	int N = 512;
+	int N = 4;
 
 	int count = 0;
-	for (int i = startRow; i < startRow + 32; i++)
+	for (int i = startRow; i < startRow + 3; i++)
 	{
-		for (int j = startCol; j < startCol + 32; j++)
+		for (int j = startCol; j < startCol + 2; j++)
 		{
 			//std::cout << i << " " << j << std::endl;
 			k = i * N + j;
-			this->_data[k] = block._data[k];
-			//std::cout << "Outer: " << count2 << std::endl;
+			//this->_data[k] = block._data[k];
+			std::cout << "This: " << this->_data[k] << " Block: " << block._data[count] << std::endl;
+			count++;
 		}
 	}
 }
