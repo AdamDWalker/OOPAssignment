@@ -90,6 +90,8 @@ int main()
 	// writes data back to .pgm file stored in outputFileName
 	char* outputFileName = "logo_restored.pgm";
 	// Use Q = 255 for greyscale images and 1 for binary images.
+
+	
 	int Q = 1; 
 	WritePGM(outputFileName, output_data, M, N, Q);
 	WritePGM("Test1.pgm", shuffledImage.getData() , M, N, Q);
@@ -205,6 +207,11 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 					startRow2 += 32;
 				}
 			}
+			if (count1 == 1)
+			{
+				bestBlock.printmatrix();
+				std::cout << "\n\n\n" << bestSSD;
+			}
 			returnImage.placeBlock(bestBlock, colPos, rowPos);
 
 		}
@@ -226,7 +233,7 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 double sumSquaredDiffs(Matrix unshuffled, Matrix shuffled, int M, int N)
 {
 	double SSD = 0;
-	Matrix temp;
+	Matrix temp(32, 32);
 
 	temp = unshuffled - shuffled;
 	double* tempArray = temp.getData();

@@ -208,10 +208,10 @@ Matrix Matrix::getBlock(int start_column, int end_column, int start_row, int end
     
     double* tempData = new double[rows * columns];
     
-    for(int i = start_column; i <= end_column; i++)
+    for(int i = start_row; i <= end_row; i++)
     {
         
-        for(int j = start_row; j <= end_row; j++)
+		for (int j = start_column; j <= end_column; j++)
         {
             //int k = i * N + j;
             k = (i * _N) + j;
@@ -222,6 +222,8 @@ Matrix Matrix::getBlock(int start_column, int end_column, int start_row, int end
     }
     
     Matrix returnMatrix(rows, columns, tempData);
+	delete[] tempData;
+
     return returnMatrix;
 }
 
