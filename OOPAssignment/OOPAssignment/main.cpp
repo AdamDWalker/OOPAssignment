@@ -91,7 +91,7 @@ int main()
 	char* outputFileName = "logo_restored.pgm";
 	// Use Q = 255 for greyscale images and 1 for binary images.
 	int Q = 1; 
-	//WritePGM(outputFileName, output_data, M, N, Q);
+	WritePGM(outputFileName, output_data, M, N, Q);
 	WritePGM("Test1.pgm", shuffledImage.getData() , M, N, Q);
 	WritePGM("Test2.pgm", noisyImage.getData(), M, N, Q);
 
@@ -145,13 +145,6 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 	int startRow2 = 0;
 	int count2 = 0;
 
-	// Store the start and end indices, and the SSD result for all 16 comparisons for each block in the unshuffled matrix, then search the array for the best SSD and the associated indices after comparing them all and repeat
-	int NNSResults[768];
-
-	int startColIndex = 0;
-	int startRowIndex = startColIndex + 1;
-	int ssdResult = startColIndex + 2;
-
 	//Matrix currentUnshuffled = unshuffled_image.getBlock(startIndex, endIndex, startIndex, endIndex);
 
 	for (int i = 0; i < 256; i++)
@@ -160,30 +153,48 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 
 		// PutBlock goes here
 
-		// Reset all the stuff for the next round of comparisons
-		startColIndex = 0;
-		startRowIndex = startColIndex + 1;
-		ssdResult = startColIndex + 2;
-
 		startCol2 = 0;
 		startRow2 = 0;
+
+		// These are for the best matching block based on the SSD
+		Matrix bestBlock;
+		Matrix currentBlock;
+		double SSD, bestSSD = 0;
+		int colPos, rowPos;
 
 		if (count1 < 16)
 		{
 			for (int j = 0; j < 256; j++)
 			{
 				if (count2 < 16)
-				{
-					if (count2 == 1)
-						//std::cout << "First loop for count: " << count1 << std::endl;
+				{					
+					/*
 					//unshuffled_image.getBlock(startCol1, startCol1 + 31, startRow1, startRow1 + 31);
 					//shuffled_image.getBlock(startCol2, startCol2 + 31, startRow2, startRow2 + 31);
 					NNSResults[startColIndex] = startCol2;
 					NNSResults[startRowIndex] = startRow2;
-					NNSResults[ssdResult] = sumSquaredDiffs(unshuffled_image.getBlock(startCol1, startCol1 + 31, startRow1, startRow1 + 31), shuffled_image.getBlock(startCol2, startCol2 + 31, startRow2, startRow2 + 31), 32, 32);
 					startColIndex += 3;
 					startRowIndex = startColIndex + 1;
 					ssdResult = startColIndex + 2;
+					*/
+					currentBlock = shuffled_image.getBlock(startCol2, startCol2 + 31, startRow2, startRow2 + 31);
+					SSD = sumSquaredDiffs(unshuffled_image.getBlock(startCol1, startCol1 + 31, startRow1, startRow1 + 31), currentBlock, 32, 32);
+					
+					if (count2 == 1)
+					{
+						bestSSD = SSD;
+						bestBlock = currentBlock;
+						colPos = startCol2;
+						rowPos = startRow2;
+					}
+					else if (SSD < bestSSD)
+					{
+						bestSSD = SSD;
+						bestBlock = currentBlock;
+						colPos = startCol2;
+						rowPos = startRow2;
+					}
+					
 					startCol2 += 32;
 					count2++;
 				}
@@ -194,32 +205,7 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 					startRow2 += 32;
 				}
 			}
-			// Stuff here about moving along the row (increase column values)
-			// Column increases by 32 but row stays the same
-			//int current = 0;
-			int best = 0;
-			int blockStartCol = 0;
-			int blockStartRow = 0;
-			for (int i = 2; i < 768; i += 3)
-			{
-				if (i == 2)
-				{
-					best = NNSResults[i];
-					blockStartCol = NNSResults[i - 2];
-					blockStartRow = NNSResults[i - 1];
-				}
-				else if (NNSResults[i] < best)
-				{
-					best = NNSResults[i];
-					blockStartCol = NNSResults[i - 2];
-					blockStartRow = NNSResults[i - 1];
-				}
-			}
-			for (int i = 0; i < 768; i++)
-			{
-				std::cout << " " << NNSResults[i];
-			}
-			//returnImage.placeBlock(shuffled_image.getBlock(blockStartCol, blockStartCol + 31, blockStartRow, blockStartRow + 31), blockStartCol, blockStartRow);
+			returnImage.placeBlock(bestBlock, colPos, rowPos);
 
 		}
 		else
