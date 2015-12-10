@@ -161,7 +161,7 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 		// These are for the best matching block based on the SSD
 		Matrix bestBlock;
 		Matrix currentBlock;
-		double SSD, bestSSD = 0;
+		double SSD, bestSSD = 5000;
 		int colPos, rowPos;
 
 		if (count1 < 16)
@@ -183,7 +183,7 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 					SSD = sumSquaredDiffs(unshuffled_image.getBlock(startCol1, startCol1 + 31, startRow1, startRow1 + 31), currentBlock, 32, 32);
 					std::cout << " " << SSD;
 					
-					if (count2 == 0)
+					if (j == 0)
 					{
 						bestSSD = SSD;
 						bestBlock = currentBlock;
@@ -191,7 +191,7 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 						rowPos = startRow2;
 					}
 
-					if (SSD < bestSSD)
+					if (SSD <= bestSSD)
 					{
 						bestSSD = SSD;
 						bestBlock = currentBlock;
@@ -209,10 +209,10 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 					startRow2 += 32;
 				}
 			}
-			if (count1 == 1)
+			//if (count1 == 1)
 			{
 				bestBlock.printmatrix();
-				std::cout << "\n\n\n" << bestSSD;
+				std::cout << "\n\n\n SSD: " << bestSSD;
 			}
 			returnImage.placeBlock(bestBlock, startCol1, startRow1);
 
@@ -237,11 +237,11 @@ double sumSquaredDiffs(Matrix unshuffled, Matrix shuffled, int M, int N)
 	double SSD = 0;
 	Matrix temp(32, 32);
 
-	temp = unshuffled - shuffled;
+	temp = shuffled - unshuffled;
 	double* tempArray = temp.getData();
 	for (int i = 0; i < M * N; i++)
 	{
-		int temp = (tempArray[i] * tempArray[i]);
+		double temp = (tempArray[i] * tempArray[i]);
 		SSD += temp;
 	}
 
