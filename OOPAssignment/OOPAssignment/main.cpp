@@ -49,8 +49,8 @@ int main()
 	input_data = readTXT(inputFileName, M, N);
 	noisy_image = readTXT("unshuffled_logo_noisy.txt", M, N);
 
-	BinaryImage shuffledImage(M, N, input_data, 128);
-	BinaryImage noisyImage(M, N, noisy_image, 128);
+	BinaryImage shuffledImage(M, N, input_data, 100);
+	BinaryImage noisyImage(M, N, noisy_image, 100);
 
 
 	/*int startCol = 0;
@@ -181,7 +181,7 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 					*/
 					currentBlock = shuffled_image.getBlock(startCol2, startCol2 + 31, startRow2, startRow2 + 31);
 					SSD = sumSquaredDiffs(unshuffled_image.getBlock(startCol1, startCol1 + 31, startRow1, startRow1 + 31), currentBlock, 32, 32);
-					std::cout << " " << SSD;
+					//std::cout << " " << SSD;
 					
 					if (j == 0)
 					{
@@ -211,8 +211,8 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 			}
 			//if (count1 == 1)
 			{
-				bestBlock.printmatrix();
-				std::cout << "\n\n\n SSD: " << bestSSD;
+				//bestBlock.printmatrix();
+				//std::cout << "\n\n\n SSD: " << bestSSD;
 			}
 			returnImage.placeBlock(bestBlock, startCol1, startRow1);
 
