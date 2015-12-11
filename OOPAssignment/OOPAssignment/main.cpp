@@ -134,6 +134,7 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 	// Giant fuckoff empty image to overwrite and return
 	BinaryImage returnImage(512, 512);
 
+
 	int M = 512;
 	int N = 512;
 
