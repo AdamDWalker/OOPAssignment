@@ -3,12 +3,12 @@
 
 BinaryImage::BinaryImage() : Matrix()
 {
-	threshold = 128;
+	threshold = 100;
 }
 
 BinaryImage::BinaryImage(int M, int N) : Matrix(M, N)
 {
-	threshold = 128;
+	threshold = 100;
 }
 
 BinaryImage::BinaryImage( int M, int N, double* input_data, double threshold ) : Matrix( M, N, input_data )

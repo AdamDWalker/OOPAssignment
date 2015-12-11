@@ -181,7 +181,8 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 					*/
 					currentBlock = shuffled_image.getBlock(startCol2, startCol2 + 31, startRow2, startRow2 + 31);
 					SSD = sumSquaredDiffs(unshuffled_image.getBlock(startCol1, startCol1 + 31, startRow1, startRow1 + 31), currentBlock, 32, 32);
-					//std::cout << " " << SSD;
+					if (count1 == 12)
+						std::cout << " " << SSD;
 					
 					if (j == 0)
 					{
@@ -209,10 +210,12 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 					startRow2 += 32;
 				}
 			}
-			//if (count1 == 1)
+			if (count1 == 12)
 			{
-				//bestBlock.printmatrix();
-				//std::cout << "\n\n\n SSD: " << bestSSD;
+				std::cout << "\n\n\n SSD: " << bestSSD << std::endl;
+				bestBlock.printmatrix();
+				std::cout << "\n\n\n" << std::endl;
+				
 			}
 			returnImage.placeBlock(bestBlock, startCol1, startRow1);
 
