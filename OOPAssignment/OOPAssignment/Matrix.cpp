@@ -70,7 +70,7 @@ Matrix Matrix::operator=(const Matrix& other)
     _data = new double[_M*_N];
     
     //'this' pointer refers to the current object
-    for (int x = 0; x < (_M*_N); x++)
+    for (int x = 0; x < (_M *_N); x++)
     {
         this->_data[x] = other._data[x];
     }

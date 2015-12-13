@@ -49,26 +49,8 @@ int main()
 	input_data = readTXT(inputFileName, M, N);
 	noisy_image = readTXT("unshuffled_logo_noisy.txt", M, N);
 
-	BinaryImage shuffledImage(M, N, input_data, 100);
-	BinaryImage noisyImage(M, N, noisy_image, 100);
-
-
-	/*int startCol = 0;
-	int startRow = 0;
-
-	int count1 = 0;
-	int count2 = 0;
-	for (int i = startRow; i < startRow + 32; i++)
-	{
-		count1++;
-
-		for (int j = startCol ; j < startCol + 32; j++)
-		{
-			std::cout << i << " " << j << std::endl;
-			//std::cout << "Outer: " << count2 << std::endl;
-			count2++;
-		}
-	}*/
+	BinaryImage shuffledImage(M, N, input_data, 110);
+	BinaryImage noisyImage(M, N, noisy_image, 110);
 
 
 	BinaryImage tempImage(512, 512);
@@ -147,6 +129,7 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 	int startCol2 = 0;
 	int startRow2 = 0;
 	int count2 = 0;
+	int totalCount;
 
 	//Matrix currentUnshuffled = unshuffled_image.getBlock(startIndex, endIndex, startIndex, endIndex);
 
@@ -162,44 +145,21 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 		// These are for the best matching block based on the SSD
 		Matrix bestBlock;
 		Matrix currentBlock;
-		double SSD, bestSSD = 5000;
+		double SSD = 5000;
+		double bestSSD = 5000;
 		int colPos, rowPos;
+		totalCount = 0;
 
 		if (count1 < 16)
 		{
-			for (int j = 0; j < 256; j++)
+			for (int j = 0; j < 272; j++)
 			{
 				if (count2 < 16)
 				{					
-					/*
-					//unshuffled_image.getBlock(startCol1, startCol1 + 31, startRow1, startRow1 + 31);
-					//shuffled_image.getBlock(startCol2, startCol2 + 31, startRow2, startRow2 + 31);
-					NNSResults[startColIndex] = startCol2;
-					NNSResults[startRowIndex] = startRow2;
-					startColIndex += 3;
-					startRowIndex = startColIndex + 1;
-					ssdResult = startColIndex + 2;
-					*/
 					currentBlock = shuffled_image.getBlock(startCol2, startCol2 + 31, startRow2, startRow2 + 31);
 					SSD = sumSquaredDiffs(unshuffled_image.getBlock(startCol1, startCol1 + 31, startRow1, startRow1 + 31), currentBlock, 32, 32);
-					if (count1 == 12)
+					if (count1 == 16)
 						std::cout << " " << SSD;
-					
-					if (j == 0)
-					{
-						bestSSD = SSD;
-						bestBlock = currentBlock;
-						colPos = startCol2;
-						rowPos = startRow2;
-					}
-
-					if (SSD <= bestSSD)
-					{
-						bestSSD = SSD;
-						bestBlock = currentBlock;
-						colPos = startCol2;
-						rowPos = startRow2;
-					}
 					
 					startCol2 += 32;
 					count2++;
@@ -209,13 +169,30 @@ BinaryImage NNS(BinaryImage unshuffled_image, BinaryImage shuffled_image)
 					count2 = 0;
 					startCol2 = 0;
 					startRow2 += 32;
+
 				}
+				if (j == 0)
+				{
+					bestSSD = SSD;
+					bestBlock = currentBlock;
+					colPos = startCol2;
+					rowPos = startRow2;
+				}
+
+				if (SSD <= bestSSD)
+				{
+					bestSSD = SSD;
+					bestBlock = currentBlock;
+					colPos = startCol2;
+					rowPos = startRow2;
+				}
+				totalCount++;
 			}
-			if (count1 == 12)
+			if (count1 == 16)
 			{
 				std::cout << "\n\n\n SSD: " << bestSSD << std::endl;
 				bestBlock.printmatrix();
-				std::cout << "\n\n\n" << std::endl;
+				std::cout << "\n Count: " << count1 << "\n\n" << std::endl;
 				
 			}
 			returnImage.placeBlock(bestBlock, startCol1, startRow1);
@@ -241,7 +218,7 @@ double sumSquaredDiffs(Matrix unshuffled, Matrix shuffled, int M, int N)
 	double SSD = 0;
 	Matrix temp(32, 32);
 
-	temp = shuffled - unshuffled;
+	temp = unshuffled - shuffled;
 	double* tempArray = temp.getData();
 	for (int i = 0; i < M * N; i++)
 	{
