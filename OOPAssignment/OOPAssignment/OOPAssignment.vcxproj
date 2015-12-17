@@ -122,7 +122,6 @@
     <ClCompile Include="BinaryImage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="PreviousMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BinaryImage.h" />

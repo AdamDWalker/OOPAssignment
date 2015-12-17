@@ -199,6 +199,9 @@ void Matrix::set(int i, int j, double val)
     _data[k] = val;
 }
 
+///
+/// Goes through each value within the given positions and adds it to a matrix which is returned at the end
+///
 Matrix Matrix::getBlock(int start_column, int end_column, int start_row, int end_row)
 {
     int k;
@@ -229,6 +232,9 @@ Matrix Matrix::getBlock(int start_column, int end_column, int start_row, int end
     return returnMatrix;
 }
 
+///
+/// Similar to getblock but places the values inside the block instead of returning them
+/// 
 void Matrix::placeBlock(Matrix block, int startCol, int startRow)
 {
 	int i = startRow;
@@ -250,6 +256,9 @@ void Matrix::placeBlock(Matrix block, int startCol, int startRow)
 	}
 }
 
+///
+/// This is for debugging mostly, to visualise how a matrix looked, often accompanied by printing the associated SSD values too
+///	
 void Matrix::printmatrix()
 {
 	std::cout << "Print mtrix invoked" << std::endl;
